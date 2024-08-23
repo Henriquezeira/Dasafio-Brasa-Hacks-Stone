@@ -1,14 +1,22 @@
-from flask import Blueprint, request, jsonify
+from flask import Flask, request, jsonify
+from data_processing import load_data, preprocess_data
+from model import train_model
 
-api_bp = Blueprint('api', __name__)
+app = Flask(__name__)
 
-@api_bp.route('/predict', methods=['POST'])
-def predict():
-    data = request.json
-    # Aqui você chamará o modelo de IA para fazer previsões
-    prediction = make_prediction(data)
-    return jsonify({'prediction': prediction})
+@app.route('/train', methods=['POST'])
+def train():
+    # Carregar e pré-processar os dados
+    bank_df, sales_df, _ = load_data()
+    bank_df, sales_df = preprocess_data(bank_df, sales_df)
+    
+    # Treinar o modelo
+    model = train_model(bank_df)
+    
+    # Aqui você pode salvar o modelo treinado se desejar
+    # joblib.dump(model, 'model.pkl')
+    
+    return jsonify({"message": "Model trained successfully"})
 
-def make_prediction(data):
-    # Função de exemplo, substitua com a lógica da IA
-    return "Resultado da previsão"
+if __name__ == '__main__':
+    app.run(debug=True)
