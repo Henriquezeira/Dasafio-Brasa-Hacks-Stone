@@ -1,22 +1,16 @@
 from flask import Flask, request, jsonify
-from data_processing import load_data, preprocess_data
-from model import train_model
+from app.data_processing import load_data
+from app.models.model import train_modelgit
 
 app = Flask(__name__)
 
 @app.route('/train', methods=['POST'])
 def train():
-    # Carregar e pré-processar os dados
-    bank_df, sales_df, _ = load_data()
-    bank_df, sales_df = preprocess_data(bank_df, sales_df)
-    
-    # Treinar o modelo
-    model = train_model(bank_df)
-    
-    # Aqui você pode salvar o modelo treinado se desejar
-    # joblib.dump(model, 'model.pkl')
-    
-    return jsonify({"message": "Model trained successfully"})
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    try:
+        predial_df, impostos_df, produtos_df, funcionarios_df, prolabore_df = load_data()
+        model = train_model(predial_df, impostos_df, produtos_df, funcionarios_df, prolabore_df)
+        
+        # Aqui você pode adicionar a lógica para salvar o modelo ou fornecer uma resposta ao usuário
+        return jsonify({'message': 'Modelo treinado com sucesso!'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

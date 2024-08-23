@@ -1,25 +1,16 @@
+import pandas as pd
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 
-def train_model(bank_df):
-    # Suponha que você esteja prevendo uma coluna específica
-    X = bank_df[['feature1', 'feature2']]  # Características
-    y = bank_df['target']  # Alvo
-    
-    # Dividir dados em treino e teste
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    # Definir o modelo
+def train_model(predial_df, impostos_df, produtos_df, funcionarios_df, prolabore_df):
+    # Combine os DataFrames conforme necessário
+    combined_df = pd.concat([predial_df, impostos_df, produtos_df, funcionarios_df, prolabore_df], axis=1)
+
+    # Exemplo de como selecionar características e rótulo (ajuste conforme necessário)
+    X = combined_df[['feature1', 'feature2']]  # Substitua 'feature1', 'feature2' pelos nomes reais das colunas
+    y = combined_df['target']  # Substitua 'target' pelo nome da coluna que você deseja prever
+
+    # Treine o modelo
     model = LinearRegression()
-    
-    # Treinar o modelo
-    model.fit(X_train, y_train)
-    
-    # Avaliar o modelo
-    predictions = model.predict(X_test)
-    mse = mean_squared_error(y_test, predictions)
-    
-    print(f"Mean Squared Error: {mse}")
-    
+    model.fit(X, y)
+
     return model

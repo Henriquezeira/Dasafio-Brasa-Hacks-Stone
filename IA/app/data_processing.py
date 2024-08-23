@@ -1,24 +1,16 @@
 import pandas as pd
 
 def load_data():
-    # Caminhos para os arquivos .parquet
-    bank_path = 'data/hackathon_stone_brasa_banking_data'
-    sales_path = 'data/hackathon_stone_brasa_sales_data'
-    mcc_path = 'data/mcc.parquet'
-    
-    # Carregar os dados
-    bank_df = pd.read_parquet(bank_path)
-    sales_df = pd.read_parquet(sales_path)
-    mcc_df = pd.read_parquet(mcc_path)
-    
-    return bank_df, sales_df, mcc_df
+    # Substitua 'caminho/para/dados_stone.xlsx' pelo caminho real do seu arquivo
+    excel_path = 'caminho/para/dados_stone.xlsx'
+    # Leia todas as planilhas do arquivo
+    all_sheets = pd.read_excel(excel_path, sheet_name=None)
 
-def preprocess_data(bank_df, sales_df):
-    # Exemplo de pré-processamento
-    bank_df = bank_df.dropna()
-    sales_df = sales_df.dropna()
-    
-    # Adicione mais etapas de pré-processamento conforme necessário
-    
-    return bank_df, sales_df
+    # Extraia cada planilha em um DataFrame separado
+    predial_df = all_sheets.get('Predial')
+    impostos_df = all_sheets.get('Impostos')
+    produtos_df = all_sheets.get('Produtos')
+    funcionarios_df = all_sheets.get('Funcionarios')
+    prolabore_df = all_sheets.get('Prolabore')
 
+    return predial_df, impostos_df, produtos_df, funcionarios_df, prolabore_df
